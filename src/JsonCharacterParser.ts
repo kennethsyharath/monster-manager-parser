@@ -33,14 +33,12 @@ export class JsonCharacterParser implements CharacterParser {
   extractStats(blob:any):[string, number][] {
     const statsblob = blob[JsonCharacterParser.KEY_STATS]
     const keys = Object.keys(statsblob);
-    return keys.map((key) => [key, <number>statsblob[key]])
+    return keys.map((key) => [key, statsblob[key] as number])
   }
 
   extractActions(blob:any):[string, Action][] {
     const actionsBlob = blob[JsonCharacterParser.KEY_ACTIONS];
     const actionIds = Object.keys(actionsBlob);
-
-    //we need to extract more
 
     return actionIds.map((aId) => {
       const aBlob = actionsBlob[aId];
@@ -50,14 +48,14 @@ export class JsonCharacterParser implements CharacterParser {
       const rolls = rKeys.map((rKey) => {
         const rBlob = rollsBlob[rKey];
 
-        return <[string, Roll]>[
+        return [
           rKey, 
           new Roll(
             rBlob[JsonCharacterParser.KEY_ROLL_BONUS],
             new DndOutcomeRuleset(), // TODO: We need a Ruleset Selector/Resolver here
             ...rBlob[JsonCharacterParser.KEY_ROLL_DICE]
           )
-        ];
+        ] as [string, Roll];
       });
 
       return [
