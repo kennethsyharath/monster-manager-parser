@@ -1,0 +1,48 @@
+{
+	"_monsterManagerParserVersion": "1.0.0",
+  "ruleset": "DnD_Basic",
+	"stats": {
+		"strength": 10,
+		"dexterity": 10,
+		"constitution": 10,
+		"intelligence": 10,
+		"wisdom": 10,
+		"charisma": 10
+	},
+	"actions": {
+		"greatsword": {
+			"iterations": 2,
+			"rolls": {
+				"attack": {
+					"bonus": 0,
+					"diceToRoll":[20]
+				},
+				"damage": {
+					"bonus": 0,
+					"diceToRoll":[4,4]
+				},
+				"speed": {
+					"bonus": 0,
+					"diceToRoll": [10]
+				}
+			}
+		},
+		"scorching_ray": {
+			"iterations": 3,
+			"rolls": {
+				"attack": {
+					"bonus": 0,
+					"diceToRoll":[20]
+				},
+				"damage": {
+					"bonus": 0,
+					"diceToRoll":[6,6]
+				},
+				"speed": {
+					"bonus": 0,
+					"diceToRoll": [12]
+				}
+			}	
+		}
+	}
+}
