@@ -2,41 +2,39 @@ import { Action, Character, DndOutcomeRuleset, Roll } from '@dev-alyssa/monster-
 import { CharacterParser } from './CharacterParser';
 
 export class JsonCharacterParser implements CharacterParser {
-
-  static readonly KEY_PARSERVERSION:string = "_monsterManagerParserVersion";
-  static readonly KEY_STATS:string = "stats";
-  static readonly KEY_ACTIONS:string = "actions";
-  static readonly KEY_ACTION_ITERATIONS:string = "iterations";
-  static readonly KEY_ACTION_ROLLS:string = "rolls";
-  static readonly KEY_ROLL_BONUS:string = "bonus";
-  static readonly KEY_ROLL_DICE:string = "diceToRoll";
+  static readonly KEY_PARSERVERSION: string = '_monsterManagerParserVersion';
+  static readonly KEY_STATS: string = 'stats';
+  static readonly KEY_ACTIONS: string = 'actions';
+  static readonly KEY_ACTION_ITERATIONS: string = 'iterations';
+  static readonly KEY_ACTION_ROLLS: string = 'rolls';
+  static readonly KEY_ROLL_BONUS: string = 'bonus';
+  static readonly KEY_ROLL_DICE: string = 'diceToRoll';
 
   parse(str: string): Character {
     const blob = JSON.parse(str);
 
     if (!this.hasValidSemVer(blob)) {
-      throw new Error("Error parser version number mismatch");
+      throw new Error('Error parser version number mismatch');
     } else {
       // We now need to deconstruct the object to represent a Character
       const stats = this.extractStats(blob);
       const actions = this.extractActions(blob);
       return new Character(stats, actions);
-
     }
   }
 
-  hasValidSemVer(blob:any):boolean {
+  hasValidSemVer(blob: any): boolean {
     // TODO: compare semvers to get the desired result. For now not important.
-    return blob[JsonCharacterParser.KEY_PARSERVERSION] !== undefined
+    return blob[JsonCharacterParser.KEY_PARSERVERSION] !== undefined;
   }
 
-  extractStats(blob:any):[string, number][] {
-    const statsblob = blob[JsonCharacterParser.KEY_STATS]
+  extractStats(blob: any): [string, number][] {
+    const statsblob = blob[JsonCharacterParser.KEY_STATS];
     const keys = Object.keys(statsblob);
-    return keys.map((key) => [key, statsblob[key] as number])
+    return keys.map((key) => [key, statsblob[key] as number]);
   }
 
-  extractActions(blob:any):[string, Action][] {
+  extractActions(blob: any): [string, Action][] {
     const actionsBlob = blob[JsonCharacterParser.KEY_ACTIONS];
     const actionIds = Object.keys(actionsBlob);
 
@@ -49,23 +47,16 @@ export class JsonCharacterParser implements CharacterParser {
         const rBlob = rollsBlob[rKey];
 
         return [
-          rKey, 
+          rKey,
           new Roll(
             rBlob[JsonCharacterParser.KEY_ROLL_BONUS],
             new DndOutcomeRuleset(), // TODO: We need a Ruleset Selector/Resolver here
-            ...rBlob[JsonCharacterParser.KEY_ROLL_DICE]
-          )
+            ...rBlob[JsonCharacterParser.KEY_ROLL_DICE],
+          ),
         ] as [string, Roll];
       });
 
-      return [
-        aId, 
-        new Action(
-          rolls, 
-          aBlob[JsonCharacterParser.KEY_ACTION_ITERATIONS]
-        )
-      ]
+      return [aId, new Action(rolls, aBlob[JsonCharacterParser.KEY_ACTION_ITERATIONS])];
     });
-       
   }
 }
